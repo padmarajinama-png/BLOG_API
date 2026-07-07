@@ -2,20 +2,22 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy only the project file first so restore can be cached
-COPY Blog.API/Blog.API.csprojBlog.API/
-RUN dotnetrestoreBlog.API/Blog.API.csproj
+# Copy the project file and restore dependencies
+COPY BLOG.API/BLOG.API.csproj BLOG.API/
+RUN dotnet restore BLOG.API/BLOG.API.csproj
 
-# Copy everything else and build
-COPY ..
-WORKDIR /src/Blog.API
-RUN dotnetpublishBlog.API.csproj-cRelease-o/app/publish/p:UseAppHost=false
+# Copy the remaining source code
+COPY . .
+
+# Build and publish
+WORKDIR /src/BLOG.API
+RUN dotnet publish BLOG.API.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 EXPOSE 8080
 
-COPY --from=build /app/publish.
+COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "Blog.API.dll"]
+ENTRYPOINT ["dotnet", "BLOG.API.dll"]
