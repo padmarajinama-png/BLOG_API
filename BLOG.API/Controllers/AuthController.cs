@@ -99,7 +99,7 @@ namespace BLOG.API.Controllers
 
                         Roles = roles.ToList(),
 
-                        //Token = jwtToken
+                        Token = jwtToken
                     };
 
                     Response.Cookies.Append("access_token", jwtToken, new CookieOptions
@@ -109,7 +109,7 @@ namespace BLOG.API.Controllers
 
                         Secure = true,
 
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
 
                         Expires = DateTime.UtcNow.AddMinutes(15)
 
@@ -169,7 +169,7 @@ namespace BLOG.API.Controllers
 
                 Secure = true,
 
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
 
                 Expires = DateTime.UtcNow.AddDays(-1)
 
